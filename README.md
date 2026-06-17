@@ -1,13 +1,3 @@
----
-id: 3822eae0-1267-8062-8726-ffaa23cf845b
-title: README for Breach Trail
-created_time: 2026-06-17T06:08:00.000Z
-last_edited_time: 2026-06-17T06:22:00.000Z
-RepoKey: breachtrail
-Name: README for Breach Trail
-_thumbnail: ./assets/readme/3318F656-5DB4-4444-9F55-43E827D0CAD5_9VfLoH1t.png
-
----
 
 **Design and Development of an Automated Forensic Workflow for Memory and Disk Analysis Using Bash on Kali Linux**
 
