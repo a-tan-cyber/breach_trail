@@ -31,7 +31,6 @@ jobs:
           NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
           NOTION_DATABASE: ${{ secrets.NOTION_DATABASE }}
 
-          # Change this value for each repo
           FILTER_PROP: RepoKey
           FILTER_VALUES: breachtrail
 
@@ -43,6 +42,11 @@ jobs:
           DOWNLOAD_IMAGE_TIMEOUT: 30
           SKIP_DOWNLOADED_IMAGES: true
           DOWNLOAD_FRONTMATTER_IMAGES: true
+
+      - name: Remove Notion frontmatter from README
+        run: |
+          awk 'BEGIN{in_fm=0} NR==1 && $0=="---" {in_fm=1; next} in_fm && $0=="---" {in_fm=0; next} !in_fm {print}' README.md > README.tmp
+          mv README.tmp README.md
 
       - name: Commit README changes
         uses: stefanzweifel/git-auto-commit-action@v5
