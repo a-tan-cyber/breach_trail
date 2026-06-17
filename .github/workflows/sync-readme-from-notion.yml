@@ -1,0 +1,46 @@
+name: Sync README from Notion
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  sync-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Export README from Notion
+        uses: victornpb/notion-jam@v0.0.10
+        with:
+          NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
+          NOTION_DATABASE: ${{ secrets.NOTION_DATABASE }}
+
+          # This repo will only export the Notion database row where RepoKey = portfolio-site
+          FILTER_PROP: RepoKey
+          FILTER_VALUES: breachtrail
+
+          # Write directly to this repo's README
+          ARTICLE_PATH: README.md
+
+          # Download images here
+          ASSETS_PATH: ./assets/readme
+
+          CONVERT_PROP_CASE: snake
+          PARALLEL_PAGES: 1
+          PARALLEL_DOWNLOADS_PER_PAGE: 3
+          DOWNLOAD_IMAGE_TIMEOUT: 30
+          SKIP_DOWNLOADED_IMAGES: true
+          DOWNLOAD_FRONTMATTER_IMAGES: true
+
+      - name: Commit README changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Sync README from Notion
+          file_pattern: README.md assets/readme/*
