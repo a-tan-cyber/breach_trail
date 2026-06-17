@@ -16,23 +16,28 @@ jobs:
       - name: Check out repo
         uses: actions/checkout@v4
 
+      - name: Check required secrets exist
+        env:
+          NOTION_SECRET_CHECK: ${{ secrets.NOTION_SECRET }}
+          NOTION_DATABASE_CHECK: ${{ secrets.NOTION_DATABASE }}
+        run: |
+          test -n "$NOTION_SECRET_CHECK" || (echo "Missing NOTION_SECRET"; exit 1)
+          test -n "$NOTION_DATABASE_CHECK" || (echo "Missing NOTION_DATABASE"; exit 1)
+
       - name: Export README from Notion
-        uses: victornpb/notion-jam@v0.0.10
+        uses: victornpb/notion-jam@main
         with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
           NOTION_DATABASE: ${{ secrets.NOTION_DATABASE }}
 
-          # This repo will only export the Notion database row where RepoKey = portfolio-site
+          # Change this value per repo
           FILTER_PROP: RepoKey
           FILTER_VALUES: breachtrail
 
-          # Write directly to this repo's README
           ARTICLE_PATH: README.md
-
-          # Download images here
           ASSETS_PATH: ./assets/readme
 
-          CONVERT_PROP_CASE: snake
           PARALLEL_PAGES: 1
           PARALLEL_DOWNLOADS_PER_PAGE: 3
           DOWNLOAD_IMAGE_TIMEOUT: 30
