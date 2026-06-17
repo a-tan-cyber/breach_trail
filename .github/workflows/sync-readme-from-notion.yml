@@ -31,7 +31,7 @@ jobs:
           NOTION_SECRET: ${{ secrets.NOTION_SECRET }}
           NOTION_DATABASE: ${{ secrets.NOTION_DATABASE }}
 
-          # Change this value per repo
+          # Change this value for each repo
           FILTER_PROP: RepoKey
           FILTER_VALUES: breachtrail
 
